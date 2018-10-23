@@ -25,7 +25,7 @@ public class APIPAYME {
         RequestQueue queue = Volley.newRequestQueue(context);
         Log.i("# REQUEST",URL);
         Log.i("# PARAMS",params.toString());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String results) {

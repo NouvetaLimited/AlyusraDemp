@@ -62,7 +62,7 @@ public class payActivity extends AppCompatActivity implements View.OnClickListen
         pay.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                //login();
+                login();
                 return true;
             }
         });
@@ -87,8 +87,8 @@ public class payActivity extends AppCompatActivity implements View.OnClickListen
         amount = (EditText) findViewById(R.id.amount);
 
        adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.simple_spinner_dropdown_item, arrayList);
-        //adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
-        //spinner.setOnItemSelectedListener(this);
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spinner.setOnItemSelectedListener(this);
 
 
         if(!Util.MySharedPreference.getValue(this,"company").equalsIgnoreCase("0"))
@@ -144,7 +144,7 @@ public class payActivity extends AppCompatActivity implements View.OnClickListen
         progressBar.setVisibility(View.VISIBLE);
         final Map<String,String> params = new HashMap<String, String>();
         params.put("function","getBusinessesPayBill");
-        params.put("company",company);
+        params.put("company","admin");
 
         APIPAYME.POST(payActivity.this, params, new APIPAYME.VolleyCallback() {
             @Override
@@ -265,6 +265,43 @@ public class payActivity extends AppCompatActivity implements View.OnClickListen
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         smsVerifyCatcher.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    public  void login(){
+        AlertDialog.Builder alertadd = new AlertDialog.Builder(payActivity.this);
+
+        LayoutInflater factory = LayoutInflater.from(payActivity.this);
+        final View view = factory.inflate(R.layout.login, null);
+        final EditText username = view.findViewById(R.id.username);
+        final EditText password = view.findViewById(R.id.password);
+        mobileNotification = (EditText) view.findViewById(R.id.mobileNotification);
+
+        alertadd.setView(view);
+        alertadd.setCancelable(false);
+        alertadd.setNeutralButton("later", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dlg, int sumthin) {
+
+            }
+        });
+
+        alertadd.setPositiveButton("login", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dlg, int sumthin) {
+                if(username.getText().toString().matches("") || password.getText().toString().matches("")|| mobileNotification.getText().toString().matches("")){
+                    Toast.makeText(payActivity.this,"Empty fields!",Toast.LENGTH_LONG).show();
+                    login();
+                    me=0;
+                }else {
+                    authenticate(username.getText().toString(),password.getText().toString());
+                    Util.MySharedPreference.save(payActivity.this,"mobileNotification",mobileNotification.getText().toString());
+                    me=1;
+                }
+
+            }
+        });
+
+
+
+        alertadd.show();
+
     }
 
     private  void readSMSPERM(){

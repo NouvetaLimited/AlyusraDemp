@@ -2,7 +2,9 @@ package com.glackemi.alyusra;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,11 +19,15 @@ import butterknife.InjectView;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    SharedPreferences sp;
+
 
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
+    private boolean Islogin;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
+        onLoginSuccess();
+
+
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -88,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
-                this.finish();
+                //this.finish();
             }
         }
     }
@@ -101,7 +110,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        finish();
+        //finish();
+//        Toast.makeText(LoginActivity.this,"Order Posted!",Toast.LENGTH_LONG).show();
+        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+        LoginActivity.this.startActivity(myIntent);
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+        sp.edit().putBoolean("logged",true).apply();
     }
 
     public void onLoginFailed() {

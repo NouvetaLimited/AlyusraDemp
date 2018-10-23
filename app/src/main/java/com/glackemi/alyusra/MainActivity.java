@@ -1,6 +1,8 @@
 package com.glackemi.alyusra;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,11 +13,14 @@ public class MainActivity extends AppCompatActivity {
     Button btn_check;
     Button btn_pay;
     int me;
+    SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        me = 0;
-        if(me == 1){
+
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+
+        if(sp.getBoolean("logged",false)){
             setContentView(R.layout.activity_main);
             btn_post = (Button) findViewById(R.id.btn_post);
             btn_check = (Button) findViewById(R.id.btn_check);
